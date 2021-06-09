@@ -19,7 +19,17 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Calendar;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -118,22 +128,84 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     //Кнопка поиска
     public void find(View view) {
         Log.d("Hello", "нажаите на кнопку");
-        if(surname.getText().toString().isEmpty()&&
-            name.getText().toString().isEmpty()&&
-            otch.getText().toString().isEmpty()&&
-            birthday.getText().toString().isEmpty()&&
-            death.getText().toString().isEmpty()&&
+        String sSurname, sName, sOtch, sBirthday, sDeath, sCemetery, sGrave, sArea;
+        sSurname = surname.getText().toString();
+        sName = name.getText().toString();
+        sOtch = otch.getText().toString();
+        sBirthday = birthday.getText().toString();
+        sDeath = death.getText().toString();
+        sCemetery = cemeteryItem;
+        sGrave =  grave.getText().toString();
+        sArea = area.getText().toString();
+
+        if(sSurname.isEmpty()&&
+            sName.isEmpty()&&
+            sOtch.isEmpty()&&
+            sBirthday.isEmpty()&&
+            sDeath.isEmpty()&&
             cementeryPosithion == 0 &&
-            grave.getText().toString().isEmpty()&&
-            area.getText().toString().isEmpty())
+            sGrave.isEmpty()&&
+            sArea.isEmpty())
         {
             Toast.makeText(this, "Введите данные", Toast.LENGTH_SHORT).show();
         }
         else
         {
-            Toast.makeText(this, "Ваши данные", Toast.LENGTH_SHORT).show();
+            this.postRequest(sSurname, sName, sOtch, sBirthday,sDeath,sCemetery,sGrave,sArea);
         }
     }
 
+    //POST запрос
+    private void postRequest(String surname, String name, String otch, String birthday, String death, String cemetery, String grave, String area){
+
+        OkHttpClient client = new OkHttpClient();
+
+        String url = "http://185.117.152.68:3999/defunct/";
+        MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+        JSONObject actulData = new JSONObject();
+        try {
+            if(!surname.isEmpty()){
+                actulData.put("surename",surname);
+            }
+            if(!name.isEmpty()){
+                actulData.put("name",name);
+            }
+            if(!otch.isEmpty()){
+                actulData.put("otch",otch);
+            }
+            if(!birthday.isEmpty()){
+                actulData.put("birthday",birthday);
+            }
+            if(!death.isEmpty()){
+                actulData.put("death",death);
+            }
+            if(!cemetery.isEmpty()){
+                actulData.put("cemetery",cemetery);
+            }
+            if(!grave.isEmpty()){
+                actulData.put("grave",grave);
+            }
+            if(!area.isEmpty()){
+                actulData.put("area",area);
+            }
+
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+        }
+        RequestBody body = RequestBody.create(JSON, actulData.toString());
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 
 }
