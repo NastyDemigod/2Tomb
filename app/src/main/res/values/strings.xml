@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Путь к могиле</string>
+    <string-array name="spCementery">
+        <item>Кладбище не выбрано</item>
+        <item>Центральное</item>
+        <item>Северное</item>
+        <item>Южное</item>
+        <item>Юго-Западное</item>
+    </string-array>
+</resources>

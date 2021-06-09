@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/surname"
+
+            android:hint="Фамилия"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+        <EditText
+            android:id="@+id/name"
+
+            android:hint="Имя"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+        <EditText
+            android:id="@+id/otch"
+
+            android:hint="Отчество"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/birthday"
+
+                android:onClick="birthday_click"
+                android:hint="Дата рождения"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"/>
+            <EditText
+                android:id="@+id/death"
+
+                android:onClick="death_click"
+                android:hint="Дата смерти"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"/>
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/cemetery"
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/grave"
+
+                android:onClick="birthday_click"
+                android:hint="Захоронение"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"/>
+            <EditText
+                android:id="@+id/area"
+
+                android:onClick="death_click"
+                android:hint="Участок"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/liner">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/find_button"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_search_"
+                android:onClick="find"
+
+                app:layout_anchor="@id/surname"
+                app:layout_anchorGravity="right"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</ScrollView>
