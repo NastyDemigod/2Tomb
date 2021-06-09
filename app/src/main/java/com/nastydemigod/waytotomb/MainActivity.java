@@ -3,24 +3,30 @@ package com.nastydemigod.waytotomb;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     private EditText surname, name, otch, birthday, death, grave, area;
     private Spinner cemetery;
-    DatePickerDialog.OnDateSetListener setListener;
+    protected String cemeteryItem;
+    protected Integer cementeryPosithion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +34,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
 
         this.getId();
-        this.calendarCreate();
         this.setSpinner();
+
 
 
     }
@@ -41,13 +47,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         birthday = findViewById(R.id.birthday);
         death = findViewById(R.id.death);
         cemetery = findViewById(R.id.cemetery);
-//        grave = findViewById(R.id.editNumBurial);
-//        area = findViewById(R.id.editNumPlot);
-
-    }
-    protected void calendarCreate(){
-
-
+        grave = findViewById(R.id.grave);
+        area = findViewById(R.id.area);
 
     }
 
@@ -103,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         //Выбранный элемент спинера (кладбище)
-        String choiceCementery = cemetery.getItemAtPosition(position).toString();
+        cemeteryItem = cemetery.getItemAtPosition(position).toString();
+        cementeryPosithion = position;
+        Log.d("Hello", "Элемент: "+ cemeteryItem+", позиция: "+cementeryPosithion);
     }
 
     @Override
@@ -111,6 +114,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+
+    //Кнопка поиска
     public void find(View view) {
+        Log.d("Hello", "нажаите на кнопку");
+        if(surname.getText().toString().isEmpty()&&
+            name.getText().toString().isEmpty()&&
+            otch.getText().toString().isEmpty()&&
+            birthday.getText().toString().isEmpty()&&
+            death.getText().toString().isEmpty()&&
+            cementeryPosithion == 0 &&
+            grave.getText().toString().isEmpty()&&
+            area.getText().toString().isEmpty())
+        {
+            Toast.makeText(this, "Введите данные", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Toast.makeText(this, "Ваши данные", Toast.LENGTH_SHORT).show();
+        }
     }
+
+
 }
