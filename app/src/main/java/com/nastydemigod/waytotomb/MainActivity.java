@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         OkHttpClient client = new OkHttpClient();
 
         String url = "http://185.117.152.68:3999/defunct/";
-        MediaType JSON = MediaType.parse("application/json;charset=utf-8");
+        MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         JSONObject actulData = new JSONObject();
         try {
             Log.d("POST", "try полей");
@@ -202,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Log.d("POST", "Дата смерти");
                 actulData.put("death",sDeath);
             }
-            if(!sCemetery.isEmpty()){
+            if(cementeryPosithion!=0){
                 Log.d("POST", "Кладбище "+sCemetery);
                 actulData.put("cemetery",sCemetery);
             }
@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Log.d("POST", "catch полей");
             e.printStackTrace();
         }
+        Log.d("POST", "Запрос: "+actulData.toString());
         RequestBody body = RequestBody.create(JSON, actulData.toString());
         Request request = new Request.Builder()
                 .url(url)
@@ -229,6 +230,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         try {
             Log.d("POST", "Запрос был отправлен");
             Response response = client.newCall(request).execute();
+
+
             this.parsResponseJSON(response.body().string());
             Log.d("POST", "Ответ: "+ response.body().string());
         }
