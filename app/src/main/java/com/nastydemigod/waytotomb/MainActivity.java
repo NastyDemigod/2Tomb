@@ -26,6 +26,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Calendar;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -227,7 +229,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 .url(url)
                 .post(body)
                 .build();
+
         try {
+            //ВЫлет из приложения НАФИГ
             Log.d("POST", "Запрос был отправлен");
             Response response = client.newCall(request).execute();
 
@@ -240,6 +244,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Log.d("POST", "Произошло исключение");
             e.printStackTrace();
         }
+
     }
 
     private void parsResponseJSON(String responseBody){
@@ -262,5 +267,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     }
+
 
 }
