@@ -131,13 +131,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     //Кнопка поиска
     public void find(View view) {
         Log.d("Hello", "нажаите на кнопку");
-        String sSurname, sName, sOtch, sBirthday, sDeath, sCemetery, sGrave, sArea;
+        String sSurname, sName, sOtch, sBirthday, sDeath, iCementery,  sGrave, sArea;
+        Integer pCementery;
         sSurname = surname.getText().toString();
         sName = name.getText().toString();
         sOtch = otch.getText().toString();
         sBirthday = birthday.getText().toString();
         sDeath = death.getText().toString();
-        sCemetery = cemeteryItem;
+        pCementery = cementeryPosithion;
+        iCementery = cemeteryItem;
         sGrave =  grave.getText().toString();
         sArea = area.getText().toString();
 
@@ -154,28 +156,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         else
         {
-            this.postRequest();
+            //        запуск побочного потока
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+
+                    MainActivity.postRequest(sSurname, sName, sOtch, sBirthday,sDeath,iCementery,pCementery,sGrave,sArea);
+                }
+            });
+//        запуск побочного потока
+            thread.start();
+
         }
     }
 
     //POST запрос
-    private void postRequest(){
+    private static void postRequest(String sSurname, String sName, String sOtch, String sBirthday, String sDeath, String iCementery,Integer pCementery, String sGrave, String sArea){
         Log.d("POST", "Метод post запроса");
-
-
-        String sSurname, sName, sOtch, sBirthday, sDeath, sCemetery, sGrave, sArea;
-        sSurname = surname.getText().toString();
-        sName = name.getText().toString();
-        sOtch = otch.getText().toString();
-        sBirthday = birthday.getText().toString();
-        sDeath = death.getText().toString();
-        sCemetery = cemeteryItem;
-        sGrave =  grave.getText().toString();
-        sArea = area.getText().toString();
-
-
-
-
 
         OkHttpClient client = new OkHttpClient();
 
@@ -204,9 +200,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Log.d("POST", "Дата смерти");
                 actulData.put("death",sDeath);
             }
-            if(cementeryPosithion!=0){
-                Log.d("POST", "Кладбище "+sCemetery);
-                actulData.put("cemetery",sCemetery);
+            if(pCementery!=0){
+                Log.d("POST", "Кладбище "+iCementery);
+                actulData.put("cemetery",iCementery);
             }
             if(!sGrave.isEmpty()){
                 Log.d("POST", "Захоронение");
@@ -234,10 +230,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             //ВЫлет из приложения НАФИГ
             Log.d("POST", "Запрос был отправлен");
             Response response = client.newCall(request).execute();
-
-
-            this.parsResponseJSON(response.body().string());
             Log.d("POST", "Ответ: "+ response.body().string());
+
+
+            // Реализовать проверку на статус кода и только тогда запускать
+            MainActivity.parsResponseJSON(response.body().string());
+
         }
         catch (IOException e)
         {
@@ -247,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    private void parsResponseJSON(String responseBody){
+    private static void parsResponseJSON(String responseBody){
         Log.d("POST", "Парсинг ответа");
         try {
             JSONArray defuncts = new JSONArray(responseBody);
@@ -256,7 +254,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 try {
                     JSONObject defunct = defuncts.getJSONObject(i);
                     String fname = defunct.getString("surename");
-                    surname.setText(fname);
+                    Log.d("POST", "Фамилия: "+ fname);
+
+
+
+                    //surname.setText(fname);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
