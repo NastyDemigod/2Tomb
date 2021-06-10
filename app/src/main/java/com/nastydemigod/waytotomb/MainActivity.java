@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -151,12 +152,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         else
         {
-            this.postRequest(sSurname, sName, sOtch, sBirthday,sDeath,sCemetery,sGrave,sArea);
+            this.postRequest();
         }
     }
 
     //POST запрос
-    private void postRequest(String surname, String name, String otch, String birthday, String death, String cemetery, String grave, String area){
+    private void postRequest(){
+        Log.d("POST", "Метод post запроса");
+
+
+        String sSurname, sName, sOtch, sBirthday, sDeath, sCemetery, sGrave, sArea;
+        sSurname = surname.getText().toString();
+        sName = name.getText().toString();
+        sOtch = otch.getText().toString();
+        sBirthday = birthday.getText().toString();
+        sDeath = death.getText().toString();
+        sCemetery = cemeteryItem;
+        sGrave =  grave.getText().toString();
+        sArea = area.getText().toString();
+
+
+
+
 
         OkHttpClient client = new OkHttpClient();
 
@@ -164,34 +181,44 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         MediaType JSON = MediaType.parse("application/json;charset=utf-8");
         JSONObject actulData = new JSONObject();
         try {
-            if(!surname.isEmpty()){
-                actulData.put("surename",surname);
+            Log.d("POST", "try полей");
+            if(!sSurname.isEmpty()){
+                Log.d("POST", "Фамилия");
+                actulData.put("surename",sSurname);
             }
-            if(!name.isEmpty()){
-                actulData.put("name",name);
+            if(!sName.isEmpty()){
+                Log.d("POST", "Имя");
+                actulData.put("name",sName);
             }
-            if(!otch.isEmpty()){
-                actulData.put("otch",otch);
+            if(!sOtch.isEmpty()){
+                Log.d("POST", "Отчество");
+                actulData.put("otch",sOtch);
             }
-            if(!birthday.isEmpty()){
-                actulData.put("birthday",birthday);
+            if(!sBirthday.isEmpty()){
+                Log.d("POST", "Дата рождения");
+                actulData.put("birthday",sBirthday);
             }
-            if(!death.isEmpty()){
-                actulData.put("death",death);
+            if(!sDeath.isEmpty()){
+                Log.d("POST", "Дата смерти");
+                actulData.put("death",sDeath);
             }
-            if(!cemetery.isEmpty()){
-                actulData.put("cemetery",cemetery);
+            if(!sCemetery.isEmpty()){
+                Log.d("POST", "Кладбище "+sCemetery);
+                actulData.put("cemetery",sCemetery);
             }
-            if(!grave.isEmpty()){
-                actulData.put("grave",grave);
+            if(!sGrave.isEmpty()){
+                Log.d("POST", "Захоронение");
+                actulData.put("grave",sGrave);
             }
-            if(!area.isEmpty()){
-                actulData.put("area",area);
+            if(!sArea.isEmpty()){
+                Log.d("POST", "Участок");
+                actulData.put("area",sArea);
             }
 
         }
         catch (JSONException e)
         {
+            Log.d("POST", "catch полей");
             e.printStackTrace();
         }
         RequestBody body = RequestBody.create(JSON, actulData.toString());
@@ -200,12 +227,37 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 .post(body)
                 .build();
         try {
+            Log.d("POST", "Запрос был отправлен");
             Response response = client.newCall(request).execute();
+            this.parsResponseJSON(response.body().string());
+            Log.d("POST", "Ответ: "+ response.body().string());
         }
         catch (IOException e)
         {
+            Log.d("POST", "Произошло исключение");
             e.printStackTrace();
         }
+    }
+
+    private void parsResponseJSON(String responseBody){
+        Log.d("POST", "Парсинг ответа");
+        try {
+            JSONArray defuncts = new JSONArray(responseBody);
+            for(int i=0; i<defuncts.length();i++){
+                Log.d("POST", "Цикл с i = "+i);
+                try {
+                    JSONObject defunct = defuncts.getJSONObject(i);
+                    String fname = defunct.getString("surename");
+                    surname.setText(fname);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }
