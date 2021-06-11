@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Thread thread = new Thread(new Runnable() {
                 public void run() {
 
-                    MainActivity.postRequest(sSurname, sName, sOtch, sBirthday,sDeath,iCementery,pCementery,sGrave,sArea);
+                    postRequest(sSurname, sName, sOtch, sBirthday,sDeath,iCementery,pCementery,sGrave,sArea);
                 }
             });
 //        запуск побочного потока
@@ -170,12 +170,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     //POST запрос
-    private static void postRequest(String sSurname, String sName, String sOtch, String sBirthday, String sDeath, String iCementery,Integer pCementery, String sGrave, String sArea){
+    private void postRequest(String sSurname, String sName, String sOtch, String sBirthday, String sDeath, String iCementery,Integer pCementery, String sGrave, String sArea){
         Log.d("POST", "Метод post запроса");
 
         OkHttpClient client = new OkHttpClient();
 
-        String url = "http://185.117.152.68:3999/defunct/";
+        String url = "http://185.117.152.68:3999/defunct";
         MediaType JSON = MediaType.parse("application/json; charset=utf-8");
         JSONObject actulData = new JSONObject();
         try {
@@ -227,14 +227,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 .build();
 
         try {
-            //ВЫлет из приложения НАФИГ
+
             Log.d("POST", "Запрос был отправлен");
             Response response = client.newCall(request).execute();
             Log.d("POST", "Ответ: "+ response.body().string());
 
 
             // Реализовать проверку на статус кода и только тогда запускать
-            MainActivity.parsResponseJSON(response.body().string());
+            //parsResponseJSON(response.body().string());
 
         }
         catch (IOException e)
@@ -245,20 +245,37 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    private static void parsResponseJSON(String responseBody){
+    private void parsResponseJSON(String responseBody){
         Log.d("POST", "Парсинг ответа");
         try {
             JSONArray defuncts = new JSONArray(responseBody);
+            String error = null;
             for(int i=0; i<defuncts.length();i++){
                 Log.d("POST", "Цикл с i = "+i);
                 try {
+
                     JSONObject defunct = defuncts.getJSONObject(i);
-                    String fname = defunct.getString("surename");
-                    Log.d("POST", "Фамилия: "+ fname);
+
+                    error = defunct.getString("error");
+
+                    if(error=="Not Found"){
+                        //Сообшение о проблеме
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Неполадки на сервере", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                    else{
+                        String fname = defunct.getString("surename");
+                        Log.d("POST", "Фамилия: "+ fname);
 
 
 
-                    //surname.setText(fname);
+                        //surname.setText(fname);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
