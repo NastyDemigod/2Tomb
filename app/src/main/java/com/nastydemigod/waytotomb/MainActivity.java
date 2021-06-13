@@ -230,11 +230,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             Log.d("POST", "Запрос был отправлен");
             Response response = client.newCall(request).execute();
+            if(response.code()==200){
+                // Реализовать проверку на статус кода и только тогда запускать
+                //parsResponseJSON(response.body().string());
+            }else{
+                //Сообшение о проблеме
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Неполадки на сервере", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
             Log.d("POST", "Ответ: "+ response.body().string());
 
 
-            // Реализовать проверку на статус кода и только тогда запускать
-            //parsResponseJSON(response.body().string());
+
 
         }
         catch (IOException e)
@@ -249,32 +260,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.d("POST", "Парсинг ответа");
         try {
             JSONArray defuncts = new JSONArray(responseBody);
-            String error = null;
+
             for(int i=0; i<defuncts.length();i++){
                 Log.d("POST", "Цикл с i = "+i);
                 try {
 
                     JSONObject defunct = defuncts.getJSONObject(i);
 
-                    error = defunct.getString("error");
 
-                    if(error=="Not Found"){
-                        //Сообшение о проблеме
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Неполадки на сервере", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                    else{
                         String fname = defunct.getString("surename");
                         Log.d("POST", "Фамилия: "+ fname);
 
 
 
                         //surname.setText(fname);
-                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
