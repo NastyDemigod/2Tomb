@@ -271,9 +271,31 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         String fname = defunct.getString("surename");
                         Log.d("POST", "Фамилия: "+ fname);
 
+                        String name = defunct.getString("name");
+                        Log.d("POST", "Имя: "+ name);
+
+                        String otch = defunct.getString("otch");
+                        Log.d("POST", "Отчество: "+ otch);
+
+                        String birthday = defunct.getString("birthday");
+                        Log.d("POST", "Дата рождения: "+ birthday);
+
+                        String death = defunct.getString("death");
+                        Log.d("POST", "Дата смерти: "+ death);
+
+                        String grave = defunct.getString("grave");
+                        Log.d("POST", "Захоронение: "+ grave);
+
+                        String area = defunct.getString("area");
+                        Log.d("POST", "Участок: "+ area);
+
+                        String cemetery = defunct.getString("cemetery");
+                        Log.d("POST", "Кладбище: "+ cemetery);
+
+                        String location = defunct.getString("location");
+                        Log.d("POST", "Координаты: "+ location);
 
 
-                        //surname.setText(fname);
 
 
                 } catch (JSONException e) {
