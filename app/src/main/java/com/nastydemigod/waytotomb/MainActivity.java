@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,7 +25,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Spinner cemetery;
     protected String cemeteryItem;
     protected Integer cementeryPosithion;
+    private ListView list_defunct;
+    private DefunctAdapter defunctAdapter;
+
+    private List<Defunct> defunctList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         cemetery = findViewById(R.id.cemetery);
         grave = findViewById(R.id.grave);
         area = findViewById(R.id.area);
+
+        list_defunct = findViewById(R.id.list_defunct);
 
     }
 
@@ -277,11 +286,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         String otch = defunct.getString("otch");
                         Log.d("POST", "Отчество: "+ otch);
 
+                        String FNO = fname +" "+ name + " "+ otch;
+
                         String birthday = defunct.getString("birthday");
                         Log.d("POST", "Дата рождения: "+ birthday);
 
                         String death = defunct.getString("death");
                         Log.d("POST", "Дата смерти: "+ death);
+
+                        String dates = birthday + "-"+ death;
 
                         String grave = defunct.getString("grave");
                         Log.d("POST", "Захоронение: "+ grave);
@@ -296,12 +309,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         Log.d("POST", "Координаты: "+ location);
 
 
+                        Defunct defunctEl = new Defunct(FNO,dates,cemetery,grave,area,location);
+
+                        defunctList.add(defunctEl);
+
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Toast.makeText(getApplicationContext(), "Неполадки на сервере", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+
+            defunctAdapter = new DefunctAdapter(this, R.layout.list_defunct, defunctList);
+            list_defunct.setAdapter(defunctAdapter);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
