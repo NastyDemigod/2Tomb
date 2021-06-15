@@ -47,7 +47,7 @@ public class DefunctAdapter extends ArrayAdapter<Defunct> {
             Log.d("post", "convertView == null");
             LayoutInflater inflater = LayoutInflater.from(context);
             convertView = inflater.inflate(R.layout.list_defunct, parent, false);
-
+            holder = new Holder();
 
 
             holder.FNO = convertView.findViewById(R.id.fno);
@@ -58,8 +58,10 @@ public class DefunctAdapter extends ArrayAdapter<Defunct> {
             holder.loc = convertView.findViewById(R.id.location);
 
             convertView.setTag(holder);
+        }else{
+            holder = (Holder) convertView.getTag();
         }
-        holder = (Holder) convertView.getTag();
+
 
 
         holder.FNO.setText(defunct.getFNO());

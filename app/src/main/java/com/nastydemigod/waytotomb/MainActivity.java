@@ -259,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
                 });
             }
-            Log.d("POST", "Ответ: "+ response.body().string());
+           // Log.d("POST", "Ответ: "+ response.body().string());
 
 
 
