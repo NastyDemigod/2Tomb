@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected Integer cementeryPosithion;
     private ListView list_defunct;
     private DefunctAdapter defunctAdapter;
+    private Button find_map;
+    private TextView location;
 
     private List<Defunct> defunctList = new ArrayList<>();
 
@@ -71,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         area = findViewById(R.id.area);
 
         list_defunct = findViewById(R.id.list_defunct);
+
+        find_map = findViewById(R.id.find_map);
+
+        location = findViewById(R.id.location);
 
     }
 
@@ -241,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Response response = client.newCall(request).execute();
             if(response.code()==200){
                 // Реализовать проверку на статус кода и только тогда запускать
-                //parsResponseJSON(response.body().string());
+                parsResponseJSON(response.body().string());
             }else{
                 //Сообшение о проблеме
                 runOnUiThread(new Runnable() {
@@ -277,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     JSONObject defunct = defuncts.getJSONObject(i);
 
 
-                        String fname = defunct.getString("surename");
+                        String fname = defunct.getString("surname");
                         Log.d("POST", "Фамилия: "+ fname);
 
                         String name = defunct.getString("name");
@@ -312,6 +320,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         Defunct defunctEl = new Defunct(FNO,dates,cemetery,grave,area,location);
 
                         defunctList.add(defunctEl);
+                        Log.d("post", "Лист: "+ defunctList.toString());
 
 
 
@@ -319,15 +328,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     e.printStackTrace();
                 }
             }
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Toast.makeText(getApplicationContext(), "Неполадки на сервере", Toast.LENGTH_SHORT).show();
-//                }
-//            });
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("post", "Адаптер");
+                    defunctAdapter = new DefunctAdapter(getApplicationContext(), R.layout.list_defunct, defunctList);
+                    list_defunct.setAdapter(defunctAdapter);
+                }
+            });
 
-            defunctAdapter = new DefunctAdapter(this, R.layout.list_defunct, defunctList);
-            list_defunct.setAdapter(defunctAdapter);
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -336,5 +346,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    //Карта
+    public void findTomb(View view) {
+        String loc = location.getText().toString();
 
+//        Intent intent = new Intent(this, );
+//        intent.putExtra("location", loc);
+//        startActivity(intent);
+    }
 }
