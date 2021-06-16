@@ -50,16 +50,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Button find_map;
     private TextView location;
 
-    private List<Defunct> defunctList = new ArrayList<>();
+    private List<Defunct> defunctList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.d("post", "onCreate");
         this.getId();
         this.setSpinner();
-
+        this.setOnClickItem();
 
 
     }
@@ -75,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         area = findViewById(R.id.area);
 
         list_defunct = findViewById(R.id.list_defunct);
-
-        find_map = findViewById(R.id.find_map);
 
         location = findViewById(R.id.location);
 
@@ -160,6 +158,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         sGrave =  grave.getText().toString();
         sArea = area.getText().toString();
 
+
+
         if(sSurname.isEmpty()&&
             sName.isEmpty()&&
             sOtch.isEmpty()&&
@@ -173,6 +173,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         else
         {
+            defunctList = new ArrayList<>();
+
+
             //        запуск побочного потока
             Thread thread = new Thread(new Runnable() {
                 public void run() {
@@ -259,9 +262,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
                 });
             }
-           // Log.d("POST", "Ответ: "+ response.body().string());
-
-
 
 
         }
@@ -346,12 +346,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
-    //Карта
-    public void findTomb(View view) {
-        String loc = location.getText().toString();
 
-//        Intent intent = new Intent(this, );
-//        intent.putExtra("location", loc);
-//        startActivity(intent);
+    //Нажатие на элемент, запуск карты
+    private void setOnClickItem(){
+        Log.d("mapME", "Нажатие на элемент");
+        list_defunct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("mapME", "Нажали!!!!");
+                Defunct def = defunctList.get(position);
+                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                intent.putExtra("location",def.getLocahion());
+                startActivity(intent);
+
+
+            }
+        });
     }
+
 }
