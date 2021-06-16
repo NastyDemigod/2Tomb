@@ -3,6 +3,7 @@ package com.nastydemigod.waytotomb;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -40,6 +43,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
+
+    private static final int ERROR_DIALOG_REQUEST = 9001;
 
     private EditText surname, name, otch, birthday, death, grave, area;
     private Spinner cemetery;
@@ -161,13 +166,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
         if(sSurname.isEmpty()&&
-            sName.isEmpty()&&
-            sOtch.isEmpty()&&
-            sBirthday.isEmpty()&&
-            sDeath.isEmpty()&&
-            cementeryPosithion == 0 &&
-            sGrave.isEmpty()&&
-            sArea.isEmpty())
+                sName.isEmpty()&&
+                sOtch.isEmpty()&&
+                sBirthday.isEmpty()&&
+                sDeath.isEmpty()&&
+                cementeryPosithion == 0 &&
+                sGrave.isEmpty()&&
+                sArea.isEmpty())
         {
             Toast.makeText(this, "Введите данные", Toast.LENGTH_SHORT).show();
         }
@@ -285,42 +290,42 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     JSONObject defunct = defuncts.getJSONObject(i);
 
 
-                        String fname = defunct.getString("surname");
-                        Log.d("POST", "Фамилия: "+ fname);
+                    String fname = defunct.getString("surname");
+                    Log.d("POST", "Фамилия: "+ fname);
 
-                        String name = defunct.getString("name");
-                        Log.d("POST", "Имя: "+ name);
+                    String name = defunct.getString("name");
+                    Log.d("POST", "Имя: "+ name);
 
-                        String otch = defunct.getString("otch");
-                        Log.d("POST", "Отчество: "+ otch);
+                    String otch = defunct.getString("otch");
+                    Log.d("POST", "Отчество: "+ otch);
 
-                        String FNO = fname +" "+ name + " "+ otch;
+                    String FNO = fname +" "+ name + " "+ otch;
 
-                        String birthday = defunct.getString("birthday");
-                        Log.d("POST", "Дата рождения: "+ birthday);
+                    String birthday = defunct.getString("birthday");
+                    Log.d("POST", "Дата рождения: "+ birthday);
 
-                        String death = defunct.getString("death");
-                        Log.d("POST", "Дата смерти: "+ death);
+                    String death = defunct.getString("death");
+                    Log.d("POST", "Дата смерти: "+ death);
 
-                        String dates = birthday + "-"+ death;
+                    String dates = birthday + "-"+ death;
 
-                        String grave = defunct.getString("grave");
-                        Log.d("POST", "Захоронение: "+ grave);
+                    String grave = defunct.getString("grave");
+                    Log.d("POST", "Захоронение: "+ grave);
 
-                        String area = defunct.getString("area");
-                        Log.d("POST", "Участок: "+ area);
+                    String area = defunct.getString("area");
+                    Log.d("POST", "Участок: "+ area);
 
-                        String cemetery = defunct.getString("cemetery");
-                        Log.d("POST", "Кладбище: "+ cemetery);
+                    String cemetery = defunct.getString("cemetery");
+                    Log.d("POST", "Кладбище: "+ cemetery);
 
-                        String location = defunct.getString("location");
-                        Log.d("POST", "Координаты: "+ location);
+                    String location = defunct.getString("location");
+                    Log.d("POST", "Координаты: "+ location);
 
 
-                        Defunct defunctEl = new Defunct(FNO,dates,cemetery,grave,area,location);
+                    Defunct defunctEl = new Defunct(FNO,dates,cemetery,grave,area,location);
 
-                        defunctList.add(defunctEl);
-                        Log.d("post", "Лист: "+ defunctList.toString());
+                    defunctList.add(defunctEl);
+                    Log.d("post", "Лист: "+ defunctList.toString());
 
 
 
@@ -350,18 +355,43 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     //Нажатие на элемент, запуск карты
     private void setOnClickItem(){
         Log.d("mapME", "Нажатие на элемент");
-        list_defunct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("mapME", "Нажали!!!!");
-                Defunct def = defunctList.get(position);
-                Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                intent.putExtra("location",def.getLocahion());
-                startActivity(intent);
+        if(isServiceOK()){
+            Log.d("mapME", "Нажали, проверили, что с сервисами все в пордяке");
+            list_defunct.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d("mapME", "Нажали!!!!");
+                    Defunct def = defunctList.get(position);
+                    Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                    intent.putExtra("location",def.getLocahion());
+                    startActivity(intent);
 
 
-            }
-        });
+                }
+            });
+        }
     }
 
+
+
+    public boolean isServiceOK() {
+        Log.d("mapME", "isServicesOK: checking google service version");
+
+        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+        if (available== ConnectionResult.SUCCESS) {
+            //все хорошо
+            Log.d("mapME", "isServicesOK: Google Play Services is working");
+            return true;
+        }
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+            //получили ошибку но знаем какую
+            Log.d("mapMe", "isServicesOK: an error occured but we can fix it");
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR_DIALOG_REQUEST);
+            dialog.show();
+        }
+        else {
+            Toast.makeText(this, "You can't make map request", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
 }
