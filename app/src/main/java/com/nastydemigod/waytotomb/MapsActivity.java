@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -53,6 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
 
         //Получить координаты
         Bundle arguments = getIntent().getExtras();
@@ -131,18 +133,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-
-
-
     private void animateCamera(LatLng latLng, Float zoom){
         Log.d("mapME", "Камера animateCamera");
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
@@ -153,10 +143,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Log.d("mapME", "onMapReady");
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
 
         if (mLocationPermissionsGranted) {
             Log.d("mapME", "Разрешение есть");
@@ -181,21 +168,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             if(task.isSuccessful()){
                                 Log.d("mapME", "onComplete нашли локацию");
                                 Location curerentLocation  = (Location) task.getResult();
-                                LatLng user = new LatLng(curerentLocation.getLatitude(), curerentLocation.getLongitude());
-                                mMap.addMarker(new MarkerOptions()
-                                        .position(user)
-                                        .title("Marker in User"));
-                                animateCamera(user,DEFAULT_ZOOM);
-                               // currentLocation = curerentLocation;
-                                Log.d("mapME","Ломанные линии");
-                                Polyline polyline = googleMap.addPolyline(new PolylineOptions()
-                                        .clickable(true)
-                                        .add(
-                                                user,
-                                                tomb));
+                                if(curerentLocation!=null){
+                                    LatLng user = new LatLng(curerentLocation.getLatitude(), curerentLocation.getLongitude());
+                                    mMap.addMarker(new MarkerOptions()
+                                            .position(user)
+                                            .title("Marker in User"));
+                                    animateCamera(user,DEFAULT_ZOOM);
+                                    // currentLocation = curerentLocation;
+                                    Log.d("mapME","Ломанные линии");
+                                    Polyline polyline = googleMap.addPolyline(new PolylineOptions()
+                                            .clickable(true)
+                                            .add(
+                                                    user,
+                                                    tomb));
+                                }else{
+                                    Log.d("mapME", "Текущая локация null");
+                                    Toast.makeText(MapsActivity.this, "Невозможно получить текущее местоположение", Toast.LENGTH_SHORT).show();
+                                }
+
                             }else{
                                 Log.d("mapME", "onComplete локация нулевая");
-                                Toast.makeText(MapsActivity.this, "Невозможно получить текущее местоположение", Toast.LENGTH_SHORT);
+                                Toast.makeText(MapsActivity.this, "Невозможно получить текущее местоположение", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
