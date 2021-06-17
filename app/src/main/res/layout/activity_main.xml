@@ -108,11 +108,16 @@
                 app:layout_anchorGravity="right"
                 />
         </LinearLayout>
-
-        <ListView
-            android:id="@+id/list_defunct"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ListView
+                android:id="@+id/list_defunct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
     </LinearLayout>
 
 
