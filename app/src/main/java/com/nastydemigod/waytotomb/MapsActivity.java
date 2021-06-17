@@ -20,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -152,7 +153,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng tomb = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions()
                     .position(tomb)
-                    .title("Marker in Tomb"));
+                    .title("Marker in Tomb")
+                    .icon(BitmapDescriptorFactory.defaultMarker(210)));
             animateCamera(tomb,DEFAULT_ZOOM);
 
 
@@ -172,7 +174,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     LatLng user = new LatLng(curerentLocation.getLatitude(), curerentLocation.getLongitude());
                                     mMap.addMarker(new MarkerOptions()
                                             .position(user)
-                                            .title("Marker in User"));
+                                            .title("Marker in User")
+                                            .icon(BitmapDescriptorFactory.defaultMarker(48)));
                                     animateCamera(user,DEFAULT_ZOOM);
                                     // currentLocation = curerentLocation;
                                     Log.d("mapME","Ломанные линии");
