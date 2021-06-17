@@ -38,8 +38,11 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     //<-- okhttp3 библиотека для post запроса
 
+    //Подключение Гугл сервисов
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
 
+    //Подключение библиотеки Retrofit 
+    implementation 'com.squareup.retrofit:retrofit:1.7.1'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
