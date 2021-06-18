@@ -40,9 +40,6 @@ dependencies {
 
     //Подключение Гугл сервисов
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
-
-    //Подключение библиотеки Retrofit
-    implementation 'com.squareup.retrofit:retrofit:1.7.1'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
 
 

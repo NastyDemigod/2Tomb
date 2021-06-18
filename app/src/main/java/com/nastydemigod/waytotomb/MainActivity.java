@@ -189,6 +189,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             thread.start();
 
         }
+
+
     }
 
     //POST запрос
