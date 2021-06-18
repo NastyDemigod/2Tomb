@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected Integer cementeryPosithion;
     private ListView list_defunct;
     private DefunctAdapter defunctAdapter;
-    private Button find_map;
     private TextView location;
 
     private List<Defunct> defunctList;
@@ -65,9 +64,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         this.getId();
         this.setSpinner();
         this.setOnClickItem();
-
-
+        birthday.setEnabled(true);
+        death.setEnabled(false);
     }
+
+    //Получаем объекты о Id
     protected void getId (){
         //Получить id
         surname = findViewById(R.id.surname);
@@ -85,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    //Календарь для воода даты рождения
     public void birthday_click(View view) {
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
@@ -100,14 +102,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         },year, month, day);
 
-
-        //Разобраться с цветом
-        //datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.RED));
-
-
         datePickerDialog.show();
     }
 
+    //Каленадрь для ввода даты смерти
     public void death_click(View view) {
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
@@ -125,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         datePickerDialog.show();
     }
 
-
+    //Выпадающий список кладбищ
     protected void setSpinner(){
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spCementery, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -134,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         cemetery.setOnItemSelectedListener(this);
     }
 
+    //Выбор элемента выпадающего списка
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         //Выбранный элемент спинера (кладбище)
@@ -278,6 +277,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    //Парсинг ответа
     private void parsResponseJSON(String responseBody){
         Log.d("POST", "Парсинг ответа");
         try {
@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-
+    //Проверка что с сервисами Google все в порядке
     public boolean isServiceOK() {
         Log.d("mapME", "isServicesOK: checking google service version");
 
@@ -390,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             dialog.show();
         }
         else {
-            Toast.makeText(this, "You can't make map request", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Вы не можете вызвать карту", Toast.LENGTH_SHORT).show();
         }
         return false;
     }

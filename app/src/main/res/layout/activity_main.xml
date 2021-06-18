@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="10"
             android:hint="Дата рождения"
+
             android:onClick="birthday_click" />
 
         <EditText
@@ -92,8 +93,8 @@
         android:layout_margin="16dp"
 
         android:onClick="find"
-
-        android:src="@drawable/ic_search_" />
+        android:foreground="@drawable/ic_baseline_search"
+        android:foregroundGravity="center" />
 
     <ListView
         android:id="@+id/list_defunct"

@@ -42,13 +42,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
-    private Boolean mLocationPermissionsGranted = false;
     private static final float DEFAULT_ZOOM = 15f;
 
     private GoogleMap mMap;
     private String location;
+    private Boolean mLocationPermissionsGranted = false;
     private Float latitude, longitude;
-
     private FusedLocationProviderClient fusedLocationClient;
 
     @Override
@@ -72,7 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         longitude = Float.parseFloat(split[1]);
 
 
-
+        //Получить разрешение на местоположение
         getLocationPermission();
     }
 
@@ -87,7 +86,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(MapsActivity.this);
     }
 
-
+    //Получить разрешение на местоположение
     private void getLocationPermission() {
         Log.d("mapME", "getLocationPermission: getting location permissions");
         String[] permissions = {android.Manifest.permission.ACCESS_FINE_LOCATION,
@@ -110,7 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
+    //По результату запроса разрешений
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d("mapME", "onRequestPermissionsResult: called.");
@@ -133,23 +132,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
+    //Анимация Google камеры
     private void animateCamera(LatLng latLng, Float zoom){
         Log.d("mapME", "Камера animateCamera");
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
     }
 
-
+    //Инициализация карты
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Log.d("mapME", "onMapReady");
 
-
+        //Если разрешение на местоположение есть
         if (mLocationPermissionsGranted) {
             Log.d("mapME", "Разрешение есть");
 
-
+            //Маркер на локации выбранной могилы
             LatLng tomb = new LatLng(latitude, longitude);
             mMap.addMarker(new MarkerOptions()
                     .position(tomb)
@@ -158,10 +157,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             animateCamera(tomb,DEFAULT_ZOOM);
 
 
+            //Получение текущего местоположения
             Log.d("mapME", "getDeviceLocation");
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
             try{
+                //Если разрешение на местоположение есть
                 if(mLocationPermissionsGranted){
                     Task location  = fusedLocationClient.getLastLocation();
                     location.addOnCompleteListener(new OnCompleteListener() {
@@ -171,13 +172,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 Log.d("mapME", "onComplete нашли локацию");
                                 Location curerentLocation  = (Location) task.getResult();
                                 if(curerentLocation!=null){
+                                    //Маркер на месте пользователя
                                     LatLng user = new LatLng(curerentLocation.getLatitude(), curerentLocation.getLongitude());
                                     mMap.addMarker(new MarkerOptions()
                                             .position(user)
                                             .title("Marker in User")
                                             .icon(BitmapDescriptorFactory.defaultMarker(48)));
                                     animateCamera(user,DEFAULT_ZOOM);
-                                    // currentLocation = curerentLocation;
+
+                                    //Построение маршрута от пользователя до могилы
                                     Log.d("mapME","Ломанные линии");
                                     Polyline polyline = googleMap.addPolyline(new PolylineOptions()
                                             .clickable(true)
