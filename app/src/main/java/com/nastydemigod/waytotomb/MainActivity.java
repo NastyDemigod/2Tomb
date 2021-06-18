@@ -64,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         this.getId();
         this.setSpinner();
         this.setOnClickItem();
-        birthday.setEnabled(true);
-        death.setEnabled(false);
     }
 
     //Получаем объекты о Id
