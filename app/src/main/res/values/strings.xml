@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Путь к могиле</string>
+    <string name="app_name">2Tomb</string>
     <string-array name="spCementery">
         <item>Кладбище не выбрано</item>
         <item>Центральное</item>
@@ -7,5 +7,5 @@
         <item>Южное</item>
         <item>Юго-Западное</item>
     </string-array>
-    <string name="title_activity_maps">Путь к могиле</string>
+    <string name="title_activity_maps">2Tomb</string>
 </resources>
