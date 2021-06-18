@@ -150,10 +150,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             //Маркер на локации выбранной могилы
             LatLng tomb = new LatLng(latitude, longitude);
+            Log.d("mapME", "Новый маркер");
             mMap.addMarker(new MarkerOptions()
                     .position(tomb)
-                    .title("Marker in Tomb")
-                    .icon(BitmapDescriptorFactory.defaultMarker(210)));
+                    .title("Могила")
+                    .icon(BitmapDescriptorFactory.defaultMarker(210))
+            );
             animateCamera(tomb,DEFAULT_ZOOM);
 
 
@@ -176,7 +178,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                     LatLng user = new LatLng(curerentLocation.getLatitude(), curerentLocation.getLongitude());
                                     mMap.addMarker(new MarkerOptions()
                                             .position(user)
-                                            .title("Marker in User")
+                                            .title("Пользователь")
                                             .icon(BitmapDescriptorFactory.defaultMarker(48)));
                                     animateCamera(user,DEFAULT_ZOOM);
 
