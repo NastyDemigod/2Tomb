@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Log.d("POST", "try полей");
             if(!sSurname.isEmpty()){
                 Log.d("POST", "Фамилия");
-                actulData.put("surename",sSurname);
+                actulData.put("surname",sSurname);
             }
             if(!sName.isEmpty()){
                 Log.d("POST", "Имя");
@@ -273,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         {
             Log.d("POST", "Произошло исключение");
             e.printStackTrace();
+            Log.d("POST", "Ошибка: "+ e.getMessage());
         }
 
     }
