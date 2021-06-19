@@ -46,8 +46,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
     private String location;
-    private Boolean mLocationPermissionsGranted = false;
     private Float latitude, longitude;
+    private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient fusedLocationClient;
 
     @Override
@@ -181,6 +181,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                             .title("Пользователь")
                                             .icon(BitmapDescriptorFactory.defaultMarker(48)));
                                     animateCamera(user,DEFAULT_ZOOM);
+
+                                    mMap.setMyLocationEnabled(true);
+
 
                                     //Построение маршрута от пользователя до могилы
                                     Log.d("mapME","Ломанные линии");
