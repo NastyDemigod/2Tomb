@@ -43,6 +43,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import ru.tinkoff.decoro.MaskImpl;
+import ru.tinkoff.decoro.parser.UnderscoreDigitSlotsParser;
+import ru.tinkoff.decoro.slots.PredefinedSlots;
+import ru.tinkoff.decoro.slots.Slot;
+import ru.tinkoff.decoro.watchers.FormatWatcher;
+import ru.tinkoff.decoro.watchers.MaskFormatWatcher;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
@@ -109,6 +115,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 return "";
             }
         }});
+
+
+        //Создание маски для поля Захоронение
+        Slot[] slotsGrave = new UnderscoreDigitSlotsParser().parseSlots("#__-____-______");
+        FormatWatcher formatWatcherGrave = new MaskFormatWatcher(
+                MaskImpl.createTerminated(slotsGrave)
+        );
+        formatWatcherGrave.installOn(grave);
+
+        //Создание маски для поля Участка
+        Slot[] slotsArea = new UnderscoreDigitSlotsParser().parseSlots("&__-____-______");
+        FormatWatcher formatWatcherArea= new MaskFormatWatcher(
+                MaskImpl.createTerminated(slotsArea)
+        );
+        formatWatcherArea.installOn(area);
+
     }
 
     //Получаем объекты о Id
