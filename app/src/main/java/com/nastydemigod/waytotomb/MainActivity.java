@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -64,6 +66,49 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         this.getId();
         this.setSpinner();
         this.setOnClickItem();
+
+
+        //В строке Фамиия только буквы
+        surname.setFilters(new InputFilter[]{new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if(source.equals("")){ // для пробела
+                    return source;
+                }
+                if(source.toString().matches("[a-zA-Zа-яА-Я]+")){
+                    return source;
+                }
+                return "";
+            }
+        }});
+
+        //В строке Имя только буквы
+        name.setFilters(new InputFilter[]{new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if(source.equals("")){ // для пробела
+                    return source;
+                }
+                if(source.toString().matches("[a-zA-Zа-яА-Я]+")){
+                    return source;
+                }
+                return "";
+            }
+        }});
+
+        //В строке Отчество только буквы
+        otch.setFilters(new InputFilter[]{new InputFilter() {
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if(source.equals("")){ // для пробела
+                    return source;
+                }
+                if(source.toString().matches("[a-zA-Zа-яА-Я]+")){
+                    return source;
+                }
+                return "";
+            }
+        }});
     }
 
     //Получаем объекты о Id

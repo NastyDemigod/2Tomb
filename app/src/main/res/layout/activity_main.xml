@@ -39,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:hint="Дата рождения"
+            android:hint="Дата рождения в формате 1.1.2000"
 
             android:onClick="birthday_click" />
 
@@ -49,7 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="10"
-            android:hint="Дата смерти"
+            android:hint="Дата смерти в формате 21.6.2100"
             android:onClick="death_click" />
     </LinearLayout>
 
